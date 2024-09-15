@@ -1,7 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Map from './Map';
 import CoordinatesDisplay from './CoordinatesDisplay';
 import axios from 'axios';
+import mapboxgl from 'mapbox-gl';
+
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 // Fetch location data based on coordinates
 const fetchLocationData = async (coords) => {
@@ -19,12 +22,34 @@ const fetchLocationData = async (coords) => {
     }
 };
 
+// Function to get route details from Mapbox Directions API
+const fetchRoute = async (start, end) => {
+    try {
+        const response = await axios.get(`https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?geometries=geojson&access_token=${mapboxgl.accessToken}`);
+        if (response.data && response.data.routes && response.data.routes.length > 0) {
+            const route = response.data.routes[0];
+            return {
+                geometry: route.geometry,
+                distance: route.distance,
+                duration: route.duration
+            };
+        }
+    } catch (error) {
+        console.error('Error fetching route:', error);
+        return null;
+    }
+};
+
 const MapWithHeader = () => {
     const [coordinates, setCoordinates] = useState([0, 0]);
     const [map, setMap] = useState(null);
     const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/streets-v11');
     const [popupContent, setPopupContent] = useState(null);
     const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [route, setRoute] = useState(null);
+    const [distance, setDistance] = useState(null);
+    const [duration, setDuration] = useState(null);
+    const [pickupCoords, setPickupCoords] = useState(null);
 
     // Function to handle showing the popup with a message
     const handleShowPopup = (locationName) => {
@@ -52,7 +77,17 @@ const MapWithHeader = () => {
         }
 
         setCoordinates(coords);
-    }, []);
+
+        // If pickup location is set, fetch route
+        if (pickupCoords) {
+            const routeData = await fetchRoute(pickupCoords, coords);
+            if (routeData) {
+                setRoute(routeData.geometry);
+                setDistance(routeData.distance);
+                setDuration(routeData.duration);
+            }
+        }
+    }, [pickupCoords]);
 
     const handleZoomIn = () => {
         if (map) {
@@ -114,6 +149,12 @@ const MapWithHeader = () => {
                         onZoomIn={handleZoomIn}
                         onZoomOut={handleZoomOut}
                     />
+                    {distance !== null && duration !== null && (
+                        <div className="p-4 bg-white border rounded shadow-lg">
+                            <p>Distance: {(distance / 1000).toFixed(2)} km</p>
+                            <p>Duration: {(duration / 60).toFixed(2)} minutes</p>
+                        </div>
+                    )}
                 </div>
             </div>
 

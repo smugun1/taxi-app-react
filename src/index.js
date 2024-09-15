@@ -6,11 +6,11 @@ import reportWebVitals from './reportWebVitals';
 import 'mapbox-gl/dist/mapbox-gl.css'; // Import Mapbox CSS
 import { RideProvider } from './contexts/RideContext';
 import { AuthProvider } from './contexts/AuthContext';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+// import { Elements } from '@stripe/react-stripe-js';
+// import { loadStripe } from '@stripe/stripe-js';
 
 // Load the Stripe object with your publishable key from environment variables
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+// const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -18,9 +18,9 @@ root.render(
     <AuthProvider>
       <RideProvider>
         {/* Wrap the entire app with the Elements provider to ensure Stripe context is available throughout the app */}
-        <Elements stripe={stripePromise}>
+        {/* <Elements stripe={stripePromise}> */}
           <App />
-        </Elements>
+        {/* </Elements> */}
       </RideProvider>
     </AuthProvider>
   </React.StrictMode>

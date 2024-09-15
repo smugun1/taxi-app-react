@@ -17,26 +17,44 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
   };
 
-  // Function to handle logout
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('user');
-    setIsAuthenticated(false);
-    setUser(null);
+  // Simplified logout function from the second example
+  const logout = async () => {
+    try {
+      // Try calling Django's logout endpoint if necessary
+      const token = localStorage.getItem('token');
+      if (token) {
+        await fetch('http://localhost:8000/api/auth/logout/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    } finally {
+      // Clear local storage
+      localStorage.removeItem('token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user');
+      setIsAuthenticated(false);
+      setUser(null);
+    }
   };
 
-  // Define the checkAuthStatus function
+  // Define the checkAuthStatus function to verify token validity
   const checkAuthStatus = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
+      console.log('No token found'); // Debugging log
       setIsAuthenticated(false);
       setUser(null);
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/check-auth-status', {
+      const response = await fetch('http://localhost:8000/api/get-user/', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -44,11 +62,11 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const data = await response.json();
-        setIsAuthenticated(data.isAuthenticated);
-        setUser(data.user); // Assuming the backend sends the user data
+        console.log('User authenticated:', data); // Debugging log
+        setIsAuthenticated(true);
+        setUser(data);
       } else {
-        const text = await response.text();
-        console.error('Error fetching authentication status:', text);
+        console.error('Error fetching authentication status');
         logout();
       }
     } catch (error) {

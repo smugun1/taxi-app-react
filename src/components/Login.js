@@ -1,49 +1,64 @@
-// Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useAuth } from '../contexts/AuthContext'; // Import useAuth to access login
 
 const Login = () => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
+    const [error, setError] = useState('');
+    const navigate = useNavigate(); // Initialize useNavigate
+    const { login } = useAuth(); // Use the login function from AuthContext
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        if (!username || !password) {
-            setError('Username and password are required');
-            return;
-        }
+    const handleLogin = async () => {
+        setError(''); // Clear any previous errors
+
         try {
-            const response = await axios.post(
-                'http://localhost:8000/auth/login/', // Ensure this matches Django endpoint
-                { username, password },
-                {
-                    withCredentials: true,
-                    headers: { 'Content-Type': 'application/json' }
+            const response = await axios.post('http://localhost:8000/api/auth/login/', {
+                email,
+                password
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            );
+            });
 
-            localStorage.setItem('token', response.data.token);
-            alert('Login successful');
-        } catch (err) {
-            setError(err.response?.data?.error || 'An error occurred');
-            console.error(err);
+            const { access } = response.data;
+            localStorage.setItem('token', access); // Store the token in localStorage
+
+            // Call the login function from AuthContext to store the token and user data
+            if (login) {
+                login(access); // Ensure login function exists and works
+            }
+
+            // Navigate to a different page after successful login
+            navigate('/'); // Change the path if needed
+        } catch (error) {
+            console.error('Error during login:', error.response ? error.response.data : error.message);
+            setError('Login failed. Please check your email and password.');
         }
     };
 
     return (
-        <form onSubmit={handleLogin}>
-            <div>
-                <label>Username:</label>
-                <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-            </div>
-            <div>
-                <label>Password:</label>
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            </div>
-            <button type="submit">Login</button>
-            {error && <p>{error}</p>}
-        </form>
+        <div>
+            <h2>Login</h2>
+            <input
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                required
+            />
+            <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                required
+            />
+            <button onClick={handleLogin}>Login</button>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+        </div>
     );
 };
 

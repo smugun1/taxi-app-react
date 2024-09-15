@@ -1,76 +1,203 @@
-// Dashboard.js
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext'; // Import your custom hook
-import Payment from './Payment';
-// import { loadStripe } from '@stripe/stripe-js'; // Correctly import loadStripe
-
-// // Confirm environment variable is loaded
-// console.log('Stripe Publishable Key:', process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
-
-// // Make sure to replace this with your actual public key
-// const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+import { fetchUsers, fetchRides, fetchTransaction, fetchDriverLicense, fetchVehicle} from '../services/api';
+import '../App.css';
 
 const Dashboard = () => {
-  const [stats, setStats] = useState(null);
-  const { isAuthenticated } = useAuth(); // Access auth state without passing the context
-  const navigate = useNavigate(); // Hook for navigation
+  const [users, setUsers] = useState([]);
+  const [rides, setRides] = useState([]);
+  const [driverLicense, setDriverLicense] = useState([]);
+  const [vehicle, setVehicle] = useState([]);
+  const [transaction, setTransaction] = useState([]);  // Add transactions state
 
   useEffect(() => {
-    // Redirect to login if not authenticated
-    if (!isAuthenticated) {
-      navigate('/login');
-      return; // Prevents fetchStats from executing
-    }
-
-    const fetchStats = async () => {
+    const getUsers = async () => {
       try {
-        const token = localStorage.getItem('access_token'); // Get token from local storage or state management
-        if (!token) {
-          console.error('No access token found. Please log in again.');
-          navigate('/login'); // Redirect to login if token is missing
-          return;
-        }
-
-        const response = await axios.get('http://127.0.0.1:8000/api/driver-licenses/', {
-          headers: {
-            'Authorization': `Bearer ${token}`, // Attach token to request headers
-          },
-        });
-
-        setStats(response.data); // Save fetched stats to state
+        const usersData = await fetchUsers();
+        setUsers(usersData);
       } catch (error) {
-        console.error('Error fetching data:', error);
-        if (error.response) {
-          // Server responded with a status other than 200
-          console.error('Server Response:', error.response.status, error.response.data);
-        } else if (error.request) {
-          // Request was made but no response received
-          console.error('No response received:', error.request);
-        } else {
-          // Something else happened
-          console.error('Error:', error.message);
-        }
+        console.error('Error fetching users:', error);
       }
     };
 
-    fetchStats();
-  }, [isAuthenticated, navigate]); // Add isAuthenticated and navigate to the dependency array
+    const getRides = async () => {
+      try {
+        const ridesData = await fetchRides();
+        setRides(ridesData);
+      } catch (error) {
+        console.error('Error fetching rides:', error);
+      }
+    };
 
-  if (!stats) return <p>Loading...</p>;
+    const getDriverLicense = async () => {
+      try {
+        const driverLicenseData = await fetchDriverLicense();
+        setDriverLicense(driverLicenseData);
+      } catch (error) {
+        console.error('Error fetching driverLicense:', error);
+      }
+    };
+
+    const getVehicle = async () => {
+      try {
+        const vehicleData = await fetchVehicle();
+        setVehicle(vehicleData);
+      } catch (error) {
+        console.error('Error fetching vehicle:', error);
+      }
+    };
+
+    const getTransaction = async () => {
+      try {
+        const transactionData = await fetchTransaction();
+        setTransaction(transactionData);
+      } catch (error) {
+        console.error('Error fetching transaction:', error);
+      }
+    };
+
+    getUsers();
+    getRides();
+    getDriverLicense();
+    getVehicle();
+    getTransaction();
+  }, []);
 
   return (
-    <div>
-      <h2>Dashboard Stats</h2>
-      <ul>
-        <li>Total Rides: {stats.totalRides}</li>
-        <li>Completed Rides: {stats.completedRides}</li>
-        <li>Pending Rides: {stats.pendingRides}</li>
-        <li>Canceled Rides: {stats.canceledRides}</li>
-      </ul>
+    <div className="dashboard">
+      <h1>Admin Dashboard</h1>
 
-      <Payment />
+      {/* User List */}
+      <section>
+        <h2>Users</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Username</th>
+              <th>User Type</th>
+              <th>Active</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map(user => (
+              <tr key={user.id}>
+                <td>{user.email}</td>
+                <td>{user.username}</td>
+                <td>{user.user_type}</td>
+                <td>{user.is_active ? 'Active' : 'Inactive'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      {/* Ride List */}
+      <section>
+        <h2>Rides</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Passenger</th>
+              <th>Driver</th>
+              <th>Origin</th>
+              <th>Destination</th>
+              <th>Status</th>
+              <th>Created At</th>
+              <th>Updated At</th>
+              <th>Pickup Time</th>
+              <th>Dropoff Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rides.map(ride => (
+              <tr key={ride.id}>
+                <td>{ride.passenger}</td>
+                <td>{ride.driver || 'No driver assigned'}</td>
+                <td>{ride.origin}</td>
+                <td>{ride.destination}</td>
+                <td>{ride.status}</td>
+                <td>{new Date(ride.created_at).toLocaleDateString()}</td>
+                <td>{new Date(ride.updated_at).toLocaleDateString()}</td>
+                <td>{new Date(ride.pickup_time).toLocaleDateString()}</td>
+                <td>{new Date(ride.dropoff_time).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+    {/* DriverLicense */}
+      <section>
+        <h2>DriverLicense</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>License_number</th>
+              <th>Issue_date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {driverLicense.map(user => (
+              <tr key={user.id}>
+                <td>{user.user}</td>
+                <td>{user.license_number}</td>
+                <td>{new Date(user.issue_date).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      {/* Vehicle */}
+      <section>
+        <h2>Vehicle</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Owner</th>
+              <th>Make</th>
+              <th>Model</th>
+              <th>Registration Number</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vehicle.map(vehicle => (
+              <tr key={vehicle.id}>
+                <td>{vehicle.owner}</td>
+                <td>{vehicle.make}</td>
+                <td>{vehicle.model}</td>
+                <td>{vehicle.registration_number}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      {/* Transaction List */}
+      <section>
+        <h2>Transaction</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>Time Stamp</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transaction.map(transaction => (
+              <tr key={transaction.id}>
+                <td>{transaction.user}</td>
+                <td>{transaction.amount}</td>
+                <td>{transaction.description}</td>
+                <td>{new Date(transaction.timestamp).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
     </div>
   );
 };

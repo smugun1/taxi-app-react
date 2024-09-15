@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext'; // Import the context
 
 const CustomNavbar = () => {
-    const { isAuthenticated } = useAuth(); // Access authentication status
+    const { isAuthenticated, logout } = useAuth(); // Access authentication status
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    console.log('isAuthenticated:', isAuthenticated); // Log isAuthenticated for debugging
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -44,14 +46,14 @@ const CustomNavbar = () => {
                                         <Link to="/about" className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                                             About
                                         </Link>
-                                        <Link to="/dashboard" className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                                        <Link to="/dashboard-stats" className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                                             Dashboard
                                         </Link>
-                                        <Link to="/user-management" className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                                            Users
+                                        <Link to="/geocode" className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                                            Geocode
                                         </Link>
-                                        <Link to="/driver-licenses" className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                                            Drivers Licenses
+                                        <Link to="/map-with-header" className="text-gray-600 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                                            Map With Header
                                         </Link>
                                         <div className="relative">
                                             <button type="button" onClick={toggleDropdown} className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-100" aria-expanded={isDropdownOpen ? "true" : "false"}>
@@ -64,29 +66,14 @@ const CustomNavbar = () => {
                                             {isDropdownOpen && (
                                                 <div className="absolute z-10 mt-2 w-56 rounded-md bg-white shadow-lg origin-top-left ring-1 ring-black ring-opacity-5 divide-y divide-gray-100" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                                                     <div className="py-1">
-                                                        <Link to="/create-ride" className="text-gray-600 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
-                                                            Rides
-                                                        </Link>
-                                                        <Link to="/map-component" className="text-gray-600 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
-                                                            Map Component
-                                                        </Link>
                                                         <Link to="/map-with-header" className="text-gray-600 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
                                                             Map With Header
                                                         </Link>
-                                                        <Link to="/dashboard" className="text-gray-600 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                                                        <Link to="/dashboard-stats" className="text-gray-600 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
                                                             Dashboard
-                                                        </Link>
-                                                        <Link to="/user-management" className="text-gray-600 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
-                                                            User Management
-                                                        </Link>
-                                                        <Link to="/driver-licenses" className="text-gray-600 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
-                                                            Driver Licenses
                                                         </Link>
                                                         <Link to="/payment-intent" className="text-gray-600 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
                                                             Payment
-                                                        </Link>
-                                                        <Link to="/list-transactions" className="text-gray-600 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
-                                                            Transaction
                                                         </Link>
                                                     </div>
                                                 </div>

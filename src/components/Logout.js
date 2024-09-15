@@ -6,9 +6,8 @@ const Logout = () => {
     const token = localStorage.getItem('access_token');
 
     if (!token) {
-      // Inform the user they are already logged out or provide next steps
-      console.warn('No access token found. User might already be logged out or session expired.');
       alert('You are already logged out or your session has expired. Please log in again.');
+      window.location.href = '/login'; // Redirect to login
       return;
     }
 
@@ -19,19 +18,13 @@ const Logout = () => {
         },
       });
 
-      console.log('Logout successful:', response.data);
-      localStorage.removeItem('access_token'); // Clear token from local storage
+      localStorage.removeItem('access_token');
+      alert('Logged out successfully.');
+      window.location.href = '/login'; // Redirect after logout
 
     } catch (error) {
       console.error('Error logging out:', error);
-
-      if (error.response) {
-        console.error('Server Response:', error.response.status, error.response.data);
-      } else if (error.request) {
-        console.error('No response received:', error.request);
-      } else {
-        console.error('Error:', error.message);
-      }
+      alert('Failed to log out. Please try again.');
     }
   };
 

@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 const CoordinatesDisplay = ({ coordinates, onPan, onSelectPoint, onMapStyleChange, onZoomIn, onZoomOut }) => {
 
     const [popmessge, setPopmessage] = useState(null);
-    const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/streets-v11');
+    const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/streets-v11')
+
 
     const handlePanUp = () => {
         if (onPan) onPan('up');

@@ -6,8 +6,38 @@ import { FaTaxi, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 const About = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-      <div className="max-w-4xl p-8 rounded-lg shadow-lg bg-white">
+    <div className="container min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-400 to-purple-500 relative overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-1 gap-1 p-4 mb-2">
+        <div className="flex justify-center items-center">
+          <img
+            src={taxiImage}
+            alt="Taxi Service"
+            className="rounded-lg shadow-lg"
+          />
+        </div>
+        <div className="flex justify-center items-center">
+          <img
+            src={taxiImage}
+            alt="Taxi Service"
+            className="rounded-lg shadow-lg"
+          />
+        </div>
+        <div className="flex justify-center items-center">
+          <img
+            src={taxiImage}
+            alt="Taxi Service"
+            className="rounded-lg shadow-lg"
+          />
+        </div>
+        <div className="flex justify-center items-center">
+          <img
+            src={taxiImage}
+            alt="Taxi Service"
+            className="rounded-lg shadow-lg"
+          />
+        </div>
+      </div>
+      <div className="max-w-4xl p-8 rounded-lg shadow-lg bg-purple-300">
         <h1 className="text-4xl font-bold mb-6 text-center">About Our Taxi Service</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
           <div className="flex flex-col justify-center">
@@ -90,6 +120,36 @@ const About = () => {
               <p className="text-lg">123 Taxi Lane, City, Country</p>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-1 gap-1 p-4 mb-2">
+        <div className="flex justify-center items-center">
+          <img
+            src={taxiImage}
+            alt="Taxi Service"
+            className="rounded-lg shadow-lg"
+          />
+        </div>
+        <div className="flex justify-center items-center">
+          <img
+            src={taxiImage}
+            alt="Taxi Service"
+            className="rounded-lg shadow-lg"
+          />
+        </div>
+        <div className="flex justify-center items-center">
+          <img
+            src={taxiImage}
+            alt="Taxi Service"
+            className="rounded-lg shadow-lg"
+          />
+        </div>
+        <div className="flex justify-center items-center">
+          <img
+            src={taxiImage}
+            alt="Taxi Service"
+            className="rounded-lg shadow-lg"
+          />
         </div>
       </div>
     </div>

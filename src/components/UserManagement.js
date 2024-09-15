@@ -5,7 +5,7 @@ const UserManagement = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        axios.get('/api/users/')
+        axios.get('http://localhost:8000/api/users/')
             .then(response => {
                 setUsers(response.data);
             })

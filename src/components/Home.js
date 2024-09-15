@@ -29,8 +29,8 @@ const Home = () => {
         <section>
           {/* Animated Elements */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-24 h-24 bg-white opacity-20 rounded-full animate-pulse"></div>
-            <div className="w-48 h-48 bg-white opacity-10 absolute rounded-full animate-pulse"></div>
+            <div className="w-24 h-24 bg-teal-500 opacity-20 rounded-full animate-pulse"></div>
+            <div className="w-48 h-48 bg-slate-800 opacity-10 absolute rounded-full animate-pulse"></div>
           </div>
 
           <div>
@@ -46,7 +46,7 @@ const Home = () => {
                 </Link>
 
                 <Link
-                  to="/dashboard"
+                  to="/dashboard-stats"
                   className="bg-white text-blue-500 hover:bg-blue-300 text-lg font-bold py-3 px-8 rounded-full
                   inline-block transition duration-300 transform hover:scale-105"
                 >
@@ -61,11 +61,11 @@ const Home = () => {
                 </Link>
 
                 <Link
-                  to="/map"
+                  to="/geocode"
                   className="bg-white text-blue-500 hover:bg-blue-300 text-lg font-bold py-3 px-8 rounded-full
                   inline-block transition duration-300 transform hover:scale-105"
                 >
-                  Map Component
+                  Geocode
                 </Link>
               </>
             ) : (
