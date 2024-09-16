@@ -25,6 +25,18 @@ const App = () => {
   return (
     <div>
       {/* Your App Components */}
+      <Users />
+      <AddUserForm />
+      <UserTable />
+      <AddDriverLicence />
+      <AddVehicle />
+      <AddRide />
+      <AddLocation />
+      <AddTransaction />
+      <CreateRide />
+      <ListRides />
+      <AcceptRide />
+      <CompleteRide />
     </div>
   );
 };

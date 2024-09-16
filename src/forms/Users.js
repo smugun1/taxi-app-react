@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 // Assuming you have a fetchUsers function to get the user data
 const fetchUsers = async () => {
   // Replace with actual API call
-  const response = await fetch('/api/users');
+  const response = await fetch('http://localhost:8000/api/users');
   const data = await response.json();
   return data;
 };

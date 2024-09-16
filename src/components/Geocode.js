@@ -6,7 +6,7 @@ const Geocode = () => {
     const [coordinates, setCoordinates] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate(); // Hook for navigation
+
 
     const refreshAuthToken = async () => {
         const refreshToken = localStorage.getItem('refresh_token');

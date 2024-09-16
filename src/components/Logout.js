@@ -11,13 +11,11 @@ const Logout = () => {
     }
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/logout/', {}, {
-        refresh_token: localStorage.getItem('refresh_token')  // Include refresh token if needed
-      }, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`  // Pass the access token in the headers
-        }
-      });
+      // const response = await axios.post('http://127.0.0.1:8000/api/logout/', {}, {
+      //   headers: {
+      //     'Authorization': `Bearer ${token}`  // Pass the access token in the headers
+      //   }
+      // });
 
       localStorage.removeItem('access_token');
       alert('Logged out successfully.');

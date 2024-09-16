@@ -5,7 +5,7 @@ import axios from 'axios';
 const Payment = ({ amount }) => {
   const handleToken = async (token) => {
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/payment-intent/', {
+      const response = await axios.post('http://localhost:8000/api/payment-intent/', {
         token,
         amount,
       });

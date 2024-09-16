@@ -5,24 +5,24 @@ import axios from 'axios';
 export const RideContext = createContext();
 
 export const RideProvider = ({ children }) => {
-  const [dashboardStats, setDashboardStats] = useState({});
+  const [stats, setStats] = useState({});
   const [error, setError] = useState(null);
 
-  // Function to refresh dashboard stats with new data
-  const refreshDashboardStats = (data) => {
-    setDashboardStats(data); // Update state with new data
+  // Function to refresh stats with new data
+  const refreshStats = (data) => {
+    setStats(data); // Update state with new data
   };
 
   // Fetch data from the API with authentication
   const fetchData = async (token) => {
     try {
-      const response = await axios.get('http://localhost:8000/api/dashboard-stats', {
+      const response = await axios.get('http://localhost:8000/api/stats', {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
-      refreshDashboardStats(response.data); // Use the function defined above
+      refreshStats(response.data); // Use the function defined above
     } catch (error) {
       console.error('Error fetching data:', error);
       setError('Failed to fetch data.');
@@ -39,7 +39,7 @@ export const RideProvider = ({ children }) => {
           'Content-Type': 'application/json',
         },
       });
-      fetchData(token); // Refresh dashboard stats after adding a ride
+      fetchData(token); // Refresh stats after adding a ride
       return response.data;
     } catch (error) {
       console.error('Error adding ride:', error);
@@ -57,7 +57,7 @@ export const RideProvider = ({ children }) => {
   }, []); // Run once on component mount
 
   return (
-    <RideContext.Provider value={{ dashboardStats, refreshDashboardStats, addRide, error }}>
+    <RideContext.Provider value={{ stats, refreshStats, addRide, error }}>
       {children}
     </RideContext.Provider>
   );

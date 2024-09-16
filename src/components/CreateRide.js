@@ -10,7 +10,7 @@ const CreateRide = () => {
         e.preventDefault();
 
         try {
-            await axios.post('http://127.0.0.1:8000/api/rides/', { origin, destination }, { withCredentials: true });
+            await axios.post('http://localhost:8000/api/rides/', { origin, destination }, { withCredentials: true });
             alert('Ride created');
             setOrigin('');
             setDestination('');

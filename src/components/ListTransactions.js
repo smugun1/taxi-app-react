@@ -7,7 +7,7 @@ const ListTransactions = () => {
     useEffect(() => {
         const fetchTransactions = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/transactions/', { withCredentials: true });
+                const response = await axios.get('http://localhost:8000/api/transactions/', { withCredentials: true });
                 setTransactions(response.data);
             } catch (err) {
                 console.error(err);

@@ -6,7 +6,7 @@ const CompleteRide = ({ rideId }) => {
 
     const handleComplete = async () => {
         try {
-            await axios.post(`http://127.0.0.1:8000/api/rides/${rideId}/complete/`, {}, { withCredentials: true });
+            await axios.post(`http://localhost:8000/api/rides/${rideId}/complete/`, {}, { withCredentials: true });
             alert('Ride completed');
         } catch (err) {
             setError(err.response?.data?.error || 'An error occurred');

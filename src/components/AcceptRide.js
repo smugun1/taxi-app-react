@@ -6,7 +6,7 @@ const AcceptRide = ({ rideId }) => {
 
     const handleAccept = async () => {
         try {
-            await axios.post(`/api/rides/${rideId}/accept/`, {}, { withCredentials: true });
+            await axios.post(`http://localhost:8000/api/rides/${rideId}/accept/`, {}, { withCredentials: true });
             alert('Ride accepted');
         } catch (err) {
             setError(err.response?.data?.error || 'An error occurred');

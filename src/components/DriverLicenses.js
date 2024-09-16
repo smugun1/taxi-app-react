@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 
 const DriverLicenses = () => {
@@ -11,7 +11,7 @@ const DriverLicenses = () => {
 
   const handleTokenRefresh = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
+      const response = await axios.post('http://localhost:8000/api/token/refresh/', {
         refresh: getRefreshToken(),
       });
       const { access } = response.data;
@@ -24,9 +24,10 @@ const DriverLicenses = () => {
     }
   };
 
-  const fetchData = async (token) => {
+  // Wrap fetchData with useCallback
+  const fetchData = useCallback(async (token) => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/driver-licenses/', {
+      const response = await axios.get('http://localhost:8000/api/driver-licenses/', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ const DriverLicenses = () => {
         setLoading(false);
       }
     }
-  };
+  }, [handleTokenRefresh]); // Add handleTokenRefresh to the dependency array
 
   useEffect(() => {
     const token = getToken();
