@@ -17,10 +17,6 @@ const Login = () => {
             const response = await axios.post('http://localhost:8000/api/auth/login/', {
                 email,
                 password
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
             });
 
             const { access } = response.data;
@@ -43,11 +39,12 @@ const Login = () => {
         <div>
             <h2>Login</h2>
             <input
-                type="text"
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
                 required
+                autoComplete="email" // Enable email autocomplete
             />
             <input
                 type="password"
@@ -55,6 +52,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
                 required
+                autoComplete="current-password" // Enable password autocomplete
             />
             <button onClick={handleLogin}>Login</button>
             {error && <p style={{ color: 'red' }}>{error}</p>}

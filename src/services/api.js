@@ -1,84 +1,78 @@
-// api.js
 import axios from 'axios';
 
-// Function to get token from localStorage
-const getToken = () => localStorage.getItem('authToken');
+const API_URL = 'http://localhost:8000/api'; // Adjust as necessary
 
-// Create Axios instance with dynamic Authorization header
-const api = axios.create({
-  baseURL: 'http://localhost:8000/api',  // Your backend URL
-});
-
-// Set Authorization header dynamically based on token presence
-api.interceptors.request.use((config) => {
-  const token = getToken();
-  if (token) {
-    config.headers['Authorization'] = `Bearer ${token}`;
-  }
-  return config;
-}, (error) => {
-  return Promise.reject(error);
-});
-
-// Log the headers for debugging
-api.interceptors.request.use((config) => {
-  console.log("Axios default headers:", config.headers);
-  return config;
-}, (error) => {
-  return Promise.reject(error);
-});
-
-// Fetch users function
-export const fetchUsers = async () => {
+// Function to create a new user
+export const createUser = async (userData) => {
   try {
-    const response = await api.get('/users/');
+    const response = await axios.post(`${API_URL}/users/`, userData);
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch users', error.response || error.message);
-    throw error;  // Re-throw the error if needed for error handling in components
+    console.error('Error creating user:', error);
+    throw error;
   }
 };
 
-// Fetch rides function
-export const fetchRides = async () => {
+// Function to create a new driver license
+export const createDriverLicense = async (driverLicenseData) => {
   try {
-    const response = await api.get('/rides/');
+    const response = await axios.post(`${API_URL}/driver-licenses/`, driverLicenseData);
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch rides', error.response || error.message);
-    throw error;  // Re-throw the error if needed for error handling in components
+    console.error('Error creating driver license:', error);
+    throw error;
   }
 };
 
-// Fetch vehicles function
-export const fetchVehicle = async () => {
+// Function to create a new vehicle
+export const createVehicle = async (vehicleData) => {
   try {
-    const response = await api.get('/vehicle/');
+    const response = await axios.post(`${API_URL}/vehicles/`, vehicleData);
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch vehicle', error.response || error.message);
-    throw error;  // Re-throw the error if needed for error handling in components
+    console.error('Error creating vehicle:', error);
+    throw error;
   }
 };
 
-// Fetch driver licenses function
-export const fetchDriverLicense = async () => {
+// Function to create a new ride
+export const createRide = async (rideData) => {
   try {
-    const response = await api.get('/driver-license/');
+    const response = await axios.post(`${API_URL}/rides/`, rideData);
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch driver-license', error.response || error.message);
-    throw error;  // Re-throw the error if needed for error handling in components
+    console.error('Error creating ride:', error);
+    throw error;
   }
 };
 
-// Fetch transactions function
-export const fetchTransaction = async () => {
+// Function to create a new location
+export const createLocation = async (locationData) => {
   try {
-    const response = await api.get('/transaction-list/');
+    const response = await axios.post(`${API_URL}/locations/`, locationData);
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch transaction', error.response || error.message);
-    throw error;  // Re-throw the error if needed for error handling in components
+    console.error('Error creating location:', error);
+    throw error;
   }
 };
+
+// Function to create a new transaction
+export const createTransaction = async (transactionData) => {
+  try {
+    const response = await axios.post(`${API_URL}/transactions/`, transactionData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating transaction:', error);
+    throw error;
+  }
+};
+
+// Existing functions
+export const fetchUsers = async () => { /* ... */ };
+export const fetchDriverLicense = async () => { /* ... */ };
+export const fetchVehicle = async () => { /* ... */ };
+export const fetchRides = async () => { /* ... */ };
+export const fetchLocation = async () => { /* ... */ };
+export const fetchTransaction = async () => { /* ... */ };
+export const updateUser = async (id, userData) => { /* ... */ };

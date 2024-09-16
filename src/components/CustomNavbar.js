@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext'; // Import the context
+import { useNavigate } from 'react-router-dom';
 
 const CustomNavbar = () => {
     const { isAuthenticated, logout } = useAuth(); // Access authentication status
@@ -10,6 +11,14 @@ const CustomNavbar = () => {
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
+    };
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        // Clear token or authentication details
+        localStorage.removeItem('authToken'); // Or however you're storing tokens
+        navigate('/login'); // Redirect to login page after logging out
     };
 
     return (
@@ -96,9 +105,12 @@ const CustomNavbar = () => {
                                 </Link>
                             </>
                         ) : (
-                            <Link to="/logout" className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                                Logout
-                            </Link>
+                            <>
+                                <button onClick={handleLogout} className="bg-orange-300 m-2 p-2 hover: divide-red-500 text-red-600 rounded-md">
+                                    <Link to="/logout" className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                                        Logout
+                                    </Link>
+                                </button></>
                         )}
                     </div>
                 </div>

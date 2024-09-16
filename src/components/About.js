@@ -1,43 +1,51 @@
 import React from 'react';
 import taxiImage from '../assets/images/airport-taxi-service.png'; // Adjust the path if needed
 import cabImage from '../assets/images/yellow-taxi-cab.png'; // Adjust the path if needed
+import serviceImage from '../assets/images/Taxi service and rating.png'; // Adjust the path if needed
+import taxservImage from '../assets/images/taxi-service-images.png'; // Adjust the path if needed
+import signImage from '../assets/images/signpost.png'; // Adjust the path if needed
+import matImage from '../assets/images/modern-airport-terminal.png'; // Adjust the path if needed
+import pwImage from '../assets/images/people-waiting.png'; // Adjust the path if needed
+import tdacImage from '../assets/images/taxi-driver-and-client.png'; // Adjust the path if needed
+import tsiImage from '../assets/images/taxi-service-landing-page.png'; // Adjust the path if needed
+import bwwImage from '../assets/images/businesswoman-waiting.png'; // Adjust the path if needed
 import { FaTaxi, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 
 const About = () => {
   return (
-    <div className="container min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-400 to-purple-500 relative overflow-hidden">
-      <div className="grid grid-cols-1 md:grid-cols-1 gap-1 p-4 mb-2">
-        <div className="flex justify-center items-center">
+    <div className="container min-w-full flex items-center justify-center bg-gradient-to-r from-blue-400 to-purple-500 relative overflow-hidden">
+      <div className="grid grid-cols-3 md:grid-cols-1 gap-1 p-4 m-1">
+        <div className="flex justify-center m-4 space-x-4 bg-slate-200 rounded-md items-center">
           <img
             src={taxiImage}
             alt="Taxi Service"
             className="rounded-lg shadow-lg"
           />
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center m-4 space-x-4 bg-slate-200 rounded-md items-center">
           <img
-            src={taxiImage}
+            src={bwwImage}
             alt="Taxi Service"
             className="rounded-lg shadow-lg"
           />
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center m-4 space-x-4 bg-slate-200 rounded-md items-center">
           <img
-            src={taxiImage}
+            src={tdacImage}
             alt="Taxi Service"
             className="rounded-lg shadow-lg"
           />
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center m-4 space-x-4 bg-slate-200 rounded-md items-center">
           <img
-            src={taxiImage}
+            src={matImage}
             alt="Taxi Service"
             className="rounded-lg shadow-lg"
           />
         </div>
       </div>
-      <div className="max-w-4xl p-8 rounded-lg shadow-lg bg-purple-300">
+      <div className="min-h-full p-8 rounded-lg shadow-lg bg-purple-300">
         <h1 className="text-4xl font-bold mb-6 text-center">About Our Taxi Service</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
           <div className="flex flex-col justify-center">
@@ -52,9 +60,9 @@ const About = () => {
               id urna tincidunt posuere. Curabitur nec nibh vel risus bibendum aliquam et eget arcu.
             </p>
           </div>
-          <div className="flex justify-center items-center">
+          <div className="flex justify-center m-4 space-x-4 bg-slate-200 rounded-md items-center">
             <img
-              src={taxiImage}
+              src={pwImage}
               alt="Taxi Service"
               className="rounded-lg shadow-lg"
             />
@@ -84,9 +92,10 @@ const About = () => {
         <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">Our Fleet</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center m-4 space-x-4 bg-slate-200 rounded-md items-center">
               <img
-                src={cabImage}
+                src={signImage}matImage
+
                 alt="Our Fleet"
                 className="rounded-lg shadow-lg"
               />
@@ -123,30 +132,30 @@ const About = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-1 gap-1 p-4 mb-2">
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center m-4 space-x-4 bg-slate-200 rounded-md items-center">
           <img
-            src={taxiImage}
+            src={serviceImage}
             alt="Taxi Service"
             className="rounded-lg shadow-lg"
           />
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center m-4 space-x-4 bg-slate-200 rounded-md items-center">
           <img
-            src={taxiImage}
+            src={taxservImage}
             alt="Taxi Service"
             className="rounded-lg shadow-lg"
           />
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center m-4 space-x-4 bg-slate-200 rounded-md items-center">
           <img
-            src={taxiImage}
+            src={tsiImage}
             alt="Taxi Service"
             className="rounded-lg shadow-lg"
           />
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center m-4 space-x-4 bg-slate-200 rounded-md items-center">
           <img
-            src={taxiImage}
+            src={cabImage}
             alt="Taxi Service"
             className="rounded-lg shadow-lg"
           />

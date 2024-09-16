@@ -1,203 +1,106 @@
 import React, { useEffect, useState } from 'react';
-import { fetchUsers, fetchRides, fetchTransaction, fetchDriverLicense, fetchVehicle} from '../services/api';
-import '../App.css';
+import axios from 'axios'; // Import axios
+import EditUserForm from '../forms/EditUserForm';
+import UserTable from '../forms/UserTable';
+import AddUserForm from '../forms/AddUserForm';
+import AddDriverLicence from '../forms/AddDriverLicence';
+import AddVehicle from '../forms/AddVehicle';
+import AddRide from '../forms/AddRide';
+import AddLocation from '../forms/AddLocation';
+import AddTransaction from '../forms/AddTransaction';
+import Users from '../forms/Users';
 
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
-  const [rides, setRides] = useState([]);
-  const [driverLicense, setDriverLicense] = useState([]);
-  const [vehicle, setVehicle] = useState([]);
-  const [transaction, setTransaction] = useState([]);  // Add transactions state
+  const [editFormData, setEditFormData] = useState(null);
+  const [editingUser, setEditingUser] = useState(null);
 
   useEffect(() => {
-    const getUsers = async () => {
+    const fetchUsers = async () => {
       try {
-        const usersData = await fetchUsers();
-        setUsers(usersData);
+        const response = await axios.get('http://localhost:8000/api/users/'); // Corrected URL
+        setUsers(response.data);
       } catch (error) {
         console.error('Error fetching users:', error);
       }
     };
 
-    const getRides = async () => {
-      try {
-        const ridesData = await fetchRides();
-        setRides(ridesData);
-      } catch (error) {
-        console.error('Error fetching rides:', error);
-      }
-    };
-
-    const getDriverLicense = async () => {
-      try {
-        const driverLicenseData = await fetchDriverLicense();
-        setDriverLicense(driverLicenseData);
-      } catch (error) {
-        console.error('Error fetching driverLicense:', error);
-      }
-    };
-
-    const getVehicle = async () => {
-      try {
-        const vehicleData = await fetchVehicle();
-        setVehicle(vehicleData);
-      } catch (error) {
-        console.error('Error fetching vehicle:', error);
-      }
-    };
-
-    const getTransaction = async () => {
-      try {
-        const transactionData = await fetchTransaction();
-        setTransaction(transactionData);
-      } catch (error) {
-        console.error('Error fetching transaction:', error);
-      }
-    };
-
-    getUsers();
-    getRides();
-    getDriverLicense();
-    getVehicle();
-    getTransaction();
+    fetchUsers();
   }, []);
 
+  // Handle form submission to update user
+  const handleEditFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`http://localhost:8000/api/users/${editFormData.id}/`, editFormData); // Corrected URL
+      // Refresh the user list after update
+      const response = await axios.get('http://localhost:8000/api/users/'); // Corrected URL
+      setUsers(response.data);
+      setEditingUser(null);
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+  };
+
+  const renderEditForm = () => {
+    if (editingUser) {
+      return (
+        <EditUserForm
+          editFormData={editFormData}
+          setEditFormData={setEditFormData}
+          handleEditFormSubmit={handleEditFormSubmit}
+          setEditingUser={setEditingUser}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
-    <div className="dashboard">
-      <h1>Admin Dashboard</h1>
+    <div>
+      {users && users.length > 0 ? (
+        <>
+          <Users />
+          {renderEditForm()}
+        </>
+      ) : (
+        <p>Loading users...</p>
+      )}
 
-      {/* User List */}
-      <section>
-        <h2>Users</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Username</th>
-              <th>User Type</th>
-              <th>Active</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map(user => (
-              <tr key={user.id}>
-                <td>{user.email}</td>
-                <td>{user.username}</td>
-                <td>{user.user_type}</td>
-                <td>{user.is_active ? 'Active' : 'Inactive'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
+      {/* Add User Form */}
+      <div className="container hover:bg-slate-950 rounded-xl">
+        <AddUserForm />
+      </div>
 
-      {/* Ride List */}
-      <section>
-        <h2>Rides</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Passenger</th>
-              <th>Driver</th>
-              <th>Origin</th>
-              <th>Destination</th>
-              <th>Status</th>
-              <th>Created At</th>
-              <th>Updated At</th>
-              <th>Pickup Time</th>
-              <th>Dropoff Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rides.map(ride => (
-              <tr key={ride.id}>
-                <td>{ride.passenger}</td>
-                <td>{ride.driver || 'No driver assigned'}</td>
-                <td>{ride.origin}</td>
-                <td>{ride.destination}</td>
-                <td>{ride.status}</td>
-                <td>{new Date(ride.created_at).toLocaleDateString()}</td>
-                <td>{new Date(ride.updated_at).toLocaleDateString()}</td>
-                <td>{new Date(ride.pickup_time).toLocaleDateString()}</td>
-                <td>{new Date(ride.dropoff_time).toLocaleDateString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
+      {/* Add User Table */}
+      <div className="container hover:bg-slate-950 rounded-xl">
+        <UserTable />
+      </div>
 
-    {/* DriverLicense */}
-      <section>
-        <h2>DriverLicense</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>License_number</th>
-              <th>Issue_date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {driverLicense.map(user => (
-              <tr key={user.id}>
-                <td>{user.user}</td>
-                <td>{user.license_number}</td>
-                <td>{new Date(user.issue_date).toLocaleDateString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
+      {/* Add Driver License Form */}
+      <div className="container hover:bg-slate-950 rounded-xl">
+        <AddDriverLicence />
+      </div>
 
-      {/* Vehicle */}
-      <section>
-        <h2>Vehicle</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Owner</th>
-              <th>Make</th>
-              <th>Model</th>
-              <th>Registration Number</th>
-            </tr>
-          </thead>
-          <tbody>
-            {vehicle.map(vehicle => (
-              <tr key={vehicle.id}>
-                <td>{vehicle.owner}</td>
-                <td>{vehicle.make}</td>
-                <td>{vehicle.model}</td>
-                <td>{vehicle.registration_number}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
+      {/* Add Vehicle Form */}
+      <div className="container hover:bg-slate-950 rounded-xl">
+        <AddVehicle />
+      </div>
 
-      {/* Transaction List */}
-      <section>
-        <h2>Transaction</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>User</th>
-              <th>Amount</th>
-              <th>Description</th>
-              <th>Time Stamp</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transaction.map(transaction => (
-              <tr key={transaction.id}>
-                <td>{transaction.user}</td>
-                <td>{transaction.amount}</td>
-                <td>{transaction.description}</td>
-                <td>{new Date(transaction.timestamp).toLocaleDateString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
+      {/* Add Ride Form */}
+      <div className="container hover:bg-slate-950 rounded-xl">
+        <AddRide />
+      </div>
+
+      {/* Add Location Form */}
+      <div className="container hover:bg-slate-950 rounded-xl">
+        <AddLocation />
+      </div>
+
+      {/* Add Transaction Form */}
+      <div className="container hover:bg-slate-950 rounded-xl">
+        <AddTransaction />
+      </div>
     </div>
   );
 };

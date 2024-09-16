@@ -5,7 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'mapbox-gl/dist/mapbox-gl.css'; // Import Mapbox CSS
 import { RideProvider } from './contexts/RideContext';
-import { AuthProvider } from './contexts/AuthContext';
+import { BrowserRouter as Router } from 'react-router-dom'; // Import BrowserRouter
+
 // import { Elements } from '@stripe/react-stripe-js';
 // import { loadStripe } from '@stripe/stripe-js';
 
@@ -15,14 +16,14 @@ import { AuthProvider } from './contexts/AuthContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <AuthProvider>
+    <Router> {/* Wrap the entire app with Router */}
       <RideProvider>
         {/* Wrap the entire app with the Elements provider to ensure Stripe context is available throughout the app */}
         {/* <Elements stripe={stripePromise}> */}
-          <App />
+        <App />
         {/* </Elements> */}
       </RideProvider>
-    </AuthProvider>
+    </Router>
   </React.StrictMode>
 );
 

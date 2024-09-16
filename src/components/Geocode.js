@@ -1,11 +1,40 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook to redirect the user
 
 const Geocode = () => {
     const [query, setQuery] = useState('');
     const [coordinates, setCoordinates] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate(); // Hook for navigation
+
+    const refreshAuthToken = async () => {
+        const refreshToken = localStorage.getItem('refresh_token');
+        if (!refreshToken) {
+            throw new Error('No refresh token found');
+        }
+
+        try {
+            const response = await fetch('http://localhost:8000/api/token/refresh/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ refresh: refreshToken }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to refresh token');
+            }
+
+            const data = await response.json();
+            localStorage.setItem('token', data.access);
+            return data.access;
+        } catch (error) {
+            console.error('Token refresh error:', error);
+            throw error;
+        }
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -13,31 +42,53 @@ const Geocode = () => {
         setError(null);
         setCoordinates(null);
 
-        const token = localStorage.getItem('token');
-        console.log('Token:', token); // Debugging line to check token
-
+        let token = localStorage.getItem('token');
         if (!token) {
-            setError('No token found');
+            setError('No token found. Please log in.');
             setLoading(false);
             return;
         }
 
         try {
-            const response = await axios.post('http://localhost:8000/api/geocode/', { query }, {
+            let response = await fetch('http://localhost:8000/api/geocode/', {
+                method: 'POST',
                 headers: {
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({ query }),
             });
-            setCoordinates(response.data.coordinates);
 
-        } catch (err) {
-            console.error('Error during API call:', err.response ? err.response.data : err.message);
-            if (err.response && err.response.status === 404) {
-                setError('No results found');
+            if (response.status === 401) {
+                console.log('Token expired, attempting refresh...');
+                token = await refreshAuthToken();
+                if (token) {
+                    console.log('Retrying request with new token...');
+                    response = await fetch('http://localhost:8000/api/geocode/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({ query }),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    setCoordinates([data.longitude, data.latitude]);
+                }
+            } else if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             } else {
-                setError('Error connecting to API');
+                const data = await response.json();
+                setCoordinates([data.longitude, data.latitude]);
             }
+        } catch (error) {
+            setError('Error during API call: ' + error.message);
+            console.error('Error during API call:', error);
         } finally {
             setLoading(false);
         }
